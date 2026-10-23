@@ -1,0 +1,15 @@
+# Archives de distribution (générées)
+*.zip
+
+# Systèmes de fichiers
+.DS_Store
+Thumbs.db
+
+# Éditeurs
+.vscode/
+.idea/
+*.swp
+
+# Dépendances éventuelles
+node_modules/
+vendor/

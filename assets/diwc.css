@@ -1,0 +1,105 @@
+/**
+ * Styles du plugin Factures Dolibarr pour WooCommerce.
+ */
+
+.diwc-invoice-panel {
+	margin: 1.5em 0;
+	padding: 1.25em 1.5em;
+	background: #f8f8f8;
+	border: 1px solid #e0e0e0;
+	border-radius: 4px;
+}
+
+.diwc-invoice-panel h2 {
+	margin-top: 0;
+	margin-bottom: 0.6em;
+}
+
+.diwc-invoice-meta {
+	list-style: none;
+	margin: 0 0 1em;
+	padding: 0;
+}
+
+.diwc-invoice-meta li {
+	margin-bottom: 0.35em;
+}
+
+a.diwc-invoice-button {
+	display: inline-block;
+}
+
+.diwc-admin-field input#diwc_invoice_id {
+	max-width: 120px;
+}
+
+.diwc-admin-field .description {
+	display: block;
+	margin-top: 4px;
+}
+
+.diwc-admin-thirdparty {
+	background: #f6f7f7;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	padding: 8px 10px;
+}
+
+.diwc-admin-thirdparty a {
+	font-weight: 600;
+}
+
+.diwc-admin-invoice {
+	margin: 8px 0;
+	padding: 10px 12px;
+	background: #f6f7f7;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+}
+
+.diwc-admin-invoice p {
+	margin: 0 0 8px;
+}
+
+.diwc-admin-invoice .button {
+	margin-right: 6px;
+}
+
+.diwc-admin-invoice-url {
+	margin: 6px 0 0;
+	font-size: 12px;
+	word-break: break-all;
+}
+
+.diwc-admin-invoice-url code {
+	background: #fff;
+	padding: 2px 6px;
+	border: 1px solid #dcdcde;
+	border-radius: 3px;
+}
+
+.diwc-dl-error {
+	background: #fcf0f1;
+	border: 1px solid #d63638;
+	border-radius: 4px;
+	color: #8a2424;
+	margin: 0 0 10px;
+	padding: 8px 10px;
+}
+
+.diwc-dl-error code {
+	word-break: break-all;
+}
+
+.diwc-admin-invoice.diwc-admin-missing {
+	background: #fef8ee;
+	border-color: #d9a441;
+}
+
+.diwc-admin-invoice.diwc-admin-missing ul {
+	margin: 0 0 8px 1.2em;
+}
+
+.diwc-admin-invoice.diwc-admin-missing ul li {
+	margin-bottom: 4px;
+}
