@@ -1,6 +1,9 @@
 # Archives de distribution (générées)
 *.zip
 
+# Sortie de build (le workflow la génère dans le runner)
+build/
+
 # Systèmes de fichiers
 .DS_Store
 Thumbs.db

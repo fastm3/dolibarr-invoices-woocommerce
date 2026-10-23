@@ -1,0 +1,84 @@
+# Publication d'une release du plugin.
+#
+# Déclenchement :
+#   - automatique : push d'un tag « v* » (ex. v1.23.2)
+#   - manuel      : onglet Actions → « Release » → Run workflow (saisir le tag)
+#
+# Ce que fait le workflow :
+#   1. vérifie la syntaxe de tous les fichiers PHP ;
+#   2. vérifie que le tag correspond bien à DIWC_VERSION (garde-fou anti-oubli) ;
+#   3. construit dolibarr-invoices-woocommerce.zip avec le dossier parent attendu
+#      par WordPress (Extensions → Téléverser une extension) ;
+#   4. publie la release et y attache l'archive (notes générées depuis les commits).
+#
+# Durcissement possible : épingler l'action à un SHA plutôt qu'à une étiquette,
+#   ex. softprops/action-gh-release@<sha> # v2
+
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag à publier (ex. v1.23.2) — doit déjà exister et être poussé'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build et publication
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupérer les sources
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+          fetch-depth: 0
+
+      - name: Vérifier la syntaxe PHP
+        run: |
+          set -euo pipefail
+          php --version
+          find . -name '*.php' -not -path './.git/*' -print0 | xargs -0 -n1 php -l
+
+      - name: Vérifier que le tag correspond à DIWC_VERSION
+        run: |
+          set -euo pipefail
+          TAG="${{ inputs.tag || github.ref_name }}"
+          VER=$(grep -oP "define\(\s*'DIWC_VERSION',\s*'\K[^']+" dolibarr-invoices-woocommerce.php)
+          echo "tag=$TAG  version=$VER"
+          if [ "v$VER" != "$TAG" ]; then
+            echo "::error::Le tag ($TAG) ne correspond pas à DIWC_VERSION ($VER). Corrigez la version puis re-taguez."
+            exit 1
+          fi
+
+      - name: Construire l'archive
+        run: |
+          set -euo pipefail
+          mkdir -p build/dolibarr-invoices-woocommerce
+          rsync -a \
+            --exclude '.git' \
+            --exclude '.github' \
+            --exclude 'build' \
+            --exclude '.gitignore' \
+            ./ build/dolibarr-invoices-woocommerce/
+          cd build
+          zip -r ../dolibarr-invoices-woocommerce.zip dolibarr-invoices-woocommerce
+          cd ..
+          unzip -l dolibarr-invoices-woocommerce.zip
+
+      - name: Publier la release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.tag || github.ref_name }}
+          name: ${{ inputs.tag || github.ref_name }}
+          files: dolibarr-invoices-woocommerce.zip
+          generate_release_notes: true
+          fail_on_unmatched_files: true
